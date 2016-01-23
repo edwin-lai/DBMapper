@@ -2,18 +2,27 @@ require_relative 'db_connection'
 require_relative '01_sql_object'
 
 module Searchable
+  def cache
+    @cache ||= {}
+  end
+
   def where(params)
     # ...
     where_line = params.keys.map { |key| "#{key} = ?" }.join(' AND ')
-    results = DBConnection.execute(<<-SQL, *params.values)
-      SELECT
-        *
-      FROM
-        #{table_name}
-      WHERE
-        #{where_line}
-    SQL
-    results.map { |data| new(data) }
+    cache
+    if @cache[params].nil?
+      results = DBConnection.execute(<<-SQL, *params.values)
+        SELECT
+          *
+        FROM
+          #{table_name}
+        WHERE
+          #{where_line}
+      SQL
+      @cache[params] = results
+    end
+
+    @cache[params].map { |data| new(data) }
   end
 end
 
