@@ -1,6 +1,6 @@
-require '04_associatable2'
+require 'associable'
 
-describe 'Associatable' do
+describe 'Associable' do
   before(:each) { DBConnection.reset }
   after(:each) { DBConnection.reset }
 
@@ -27,17 +27,17 @@ describe 'Associatable' do
     end
   end
 
-  describe '::assoc_options' do
+  describe '::association_options' do
     it 'defaults to empty hash' do
       class TempClass < SQLObject
       end
 
-      expect(TempClass.assoc_options).to eq({})
+      expect(TempClass.association_options).to eq({})
     end
 
     it 'stores `belongs_to` options' do
-      cat_assoc_options = Cat.assoc_options
-      human_options = cat_assoc_options[:human]
+      cat_association_options = Cat.association_options
+      human_options = cat_association_options[:human]
 
       expect(human_options).to be_instance_of(BelongsToOptions)
       expect(human_options.foreign_key).to eq(:owner_id)
@@ -46,11 +46,11 @@ describe 'Associatable' do
     end
 
     it 'stores options separately for each class' do
-      expect(Cat.assoc_options).to have_key(:human)
-      expect(Human.assoc_options).to_not have_key(:human)
+      expect(Cat.association_options).to have_key(:human)
+      expect(Human.association_options).to_not have_key(:human)
 
-      expect(Human.assoc_options).to have_key(:house)
-      expect(Cat.assoc_options).to_not have_key(:house)
+      expect(Human.association_options).to have_key(:house)
+      expect(Cat.association_options).to_not have_key(:house)
     end
   end
 

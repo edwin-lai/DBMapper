@@ -1,6 +1,10 @@
-require '03_associatable'
+require 'association_options'
+require 'belongs_to_options'
+require 'has_many_options'
 
-describe 'AssocOptions' do
+require 'associable'
+
+describe 'AssociationOptions' do
   describe 'BelongsToOptions' do
     it 'provides defaults' do
       options = BelongsToOptions.new('house')
@@ -45,7 +49,7 @@ describe 'AssocOptions' do
     end
   end
 
-  describe 'AssocOptions' do
+  describe 'AssociationOptions' do
     before(:all) do
       class Cat < SQLObject
         self.finalize!
@@ -65,7 +69,7 @@ describe 'AssocOptions' do
       options = HasManyOptions.new('cats', 'Human')
       expect(options.model_class).to eq(Cat)
     end
-    
+
     it '#table_name returns table name of associated object' do
       options = BelongsToOptions.new('human')
       expect(options.table_name).to eq('humans')
@@ -76,7 +80,7 @@ describe 'AssocOptions' do
   end
 end
 
-describe 'Associatable' do
+describe 'Associable' do
   before(:each) { DBConnection.reset }
   after(:each) { DBConnection.reset }
 

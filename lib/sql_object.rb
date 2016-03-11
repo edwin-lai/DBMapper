@@ -1,9 +1,11 @@
 require_relative 'db_connection'
+require_relative 'associable'
 require 'active_support/inflector'
-# NB: the attr_accessor we wrote in phase 0 is NOT used in the rest
-# of this project. It was only a warm up.
 
 class SQLObject
+  extend Searchable
+  extend Associable
+
   def self.columns
     return @columns if @columns
     col = DBConnection.execute2(<<-SQL)[0]
@@ -26,18 +28,15 @@ class SQLObject
   end
 
   def self.table_name=(table_name)
-    # ...
     @table_name = table_name
   end
 
   def self.table_name
-    # ...
-    @table_name = self.inspect.tableize if @table_name.nil?
+    @table_name = inspect.tableize if @table_name.nil?
     @table_name
   end
 
   def self.all
-    # ...
     results = DBConnection.execute(<<-SQL)
       SELECT
         #{table_name}.*
@@ -48,14 +47,12 @@ class SQLObject
   end
 
   def self.parse_all(results)
-    # ...
     results.map do |data|
       new(data)
     end
   end
 
   def self.find(id)
-    # ...
     object_data = DBConnection.execute(<<-SQL)
       SELECT
         #{table_name}.*
@@ -69,10 +66,9 @@ class SQLObject
   end
 
   def initialize(params = {})
-    # ...
     params.each_key do |key|
       unless self.class.columns.include?(key.to_sym)
-        fail "unknown attribute '#{key}'"
+        raise "unknown attribute '#{key}'"
       end
     end
 
@@ -82,17 +78,14 @@ class SQLObject
   end
 
   def attributes
-    # ...
     @attributes ||= {}
   end
 
   def attribute_values
-    # ...
-    self.class.columns.map { |col| send "#{col}" }
+    self.class.columns.map { |col| send col.to_s }
   end
 
   def insert
-    # ...
     col_names = self.class.columns.join(', ')
     question_marks = Array.new(self.class.columns.size, '?').join(', ')
     DBConnection.execute(<<-SQL, *attribute_values)
@@ -105,7 +98,6 @@ class SQLObject
   end
 
   def update
-    # ...
     set_line = self.class.columns.map { |col| "#{col} = ?" }.join(', ')
     DBConnection.execute(<<-SQL, *attribute_values)
       UPDATE

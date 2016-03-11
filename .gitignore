@@ -1,0 +1,5 @@
+.DS_Store
+.rspec
+cats.db
+cats.sql
+spec/
