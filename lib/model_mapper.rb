@@ -2,7 +2,7 @@ require_relative 'db_connection'
 require_relative 'associable'
 require 'active_support/inflector'
 
-class SQLObject
+class ModelMapper
   extend Searchable
   extend Associable
 
@@ -12,7 +12,7 @@ class SQLObject
       SELECT
         *
       FROM
-        #{self.table_name}
+        #{table_name}
     SQL
     @columns = col.map(&:to_sym)
   end

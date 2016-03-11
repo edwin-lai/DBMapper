@@ -5,13 +5,13 @@ describe 'Associable' do
   after(:each) { DBConnection.reset }
 
   before(:all) do
-    class Cat < SQLObject
+    class Cat < ModelMapper
       belongs_to :human, foreign_key: :owner_id
 
       finalize!
     end
 
-    class Human < SQLObject
+    class Human < ModelMapper
       self.table_name = 'humans'
 
       has_many :cats, foreign_key: :owner_id
@@ -20,7 +20,7 @@ describe 'Associable' do
       finalize!
     end
 
-    class House < SQLObject
+    class House < ModelMapper
       has_many :humans
 
       finalize!
@@ -29,7 +29,7 @@ describe 'Associable' do
 
   describe '::association_options' do
     it 'defaults to empty hash' do
-      class TempClass < SQLObject
+      class TempClass < ModelMapper
       end
 
       expect(TempClass.association_options).to eq({})

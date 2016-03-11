@@ -51,11 +51,11 @@ describe 'AssociationOptions' do
 
   describe 'AssociationOptions' do
     before(:all) do
-      class Cat < SQLObject
+      class Cat < ModelMapper
         self.finalize!
       end
 
-      class Human < SQLObject
+      class Human < ModelMapper
         self.table_name = 'humans'
 
         self.finalize!
@@ -85,13 +85,13 @@ describe 'Associable' do
   after(:each) { DBConnection.reset }
 
   before(:all) do
-    class Cat < SQLObject
+    class Cat < ModelMapper
       belongs_to :human, foreign_key: :owner_id
 
       finalize!
     end
 
-    class Human < SQLObject
+    class Human < ModelMapper
       self.table_name = 'humans'
 
       has_many :cats, foreign_key: :owner_id
@@ -100,7 +100,7 @@ describe 'Associable' do
       finalize!
     end
 
-    class House < SQLObject
+    class House < ModelMapper
       has_many :humans
 
       finalize!

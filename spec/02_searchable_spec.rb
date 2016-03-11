@@ -5,11 +5,11 @@ describe 'Searchable' do
   after(:each) { DBConnection.reset }
 
   before(:all) do
-    class Cat < SQLObject
+    class Cat < ModelMapper
       finalize!
     end
 
-    class Human < SQLObject
+    class Human < ModelMapper
       self.table_name = 'humans'
 
       finalize!

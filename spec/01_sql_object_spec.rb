@@ -1,14 +1,14 @@
-require 'sql_object'
+require 'model_mapper'
 require 'db_connection'
 require 'securerandom'
 
-describe SQLObject do
+describe ModelMapper do
   before(:each) { DBConnection.reset }
   after(:each) { DBConnection.reset }
 
   context 'before ::finalize!' do
     before(:each) do
-      class Cat < SQLObject
+      class Cat < ModelMapper
       end
     end
 
@@ -24,7 +24,7 @@ describe SQLObject do
 
     describe '::table_name=' do
       it 'sets table name' do
-        class Human < SQLObject
+        class Human < ModelMapper
           self.table_name = 'humans'
         end
 
@@ -67,11 +67,11 @@ describe SQLObject do
 
   context 'after ::finalize!' do
     before(:all) do
-      class Cat < SQLObject
+      class Cat < ModelMapper
         self.finalize!
       end
 
-      class Human < SQLObject
+      class Human < ModelMapper
         self.table_name = 'humans'
 
         self.finalize!
