@@ -13,6 +13,8 @@ class ModelMapper
         *
       FROM
         #{table_name}
+      WHERE
+        false
     SQL
     @columns = col.map(&:to_sym)
   end
